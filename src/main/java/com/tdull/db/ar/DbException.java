@@ -7,6 +7,7 @@ import java.sql.SQLException;
  * User: huangtao
  * Date: 2018/7/10
  * Time: 18:21
+ * @author huangtao
  */
 public class DbException extends SQLException {
     public DbException(){

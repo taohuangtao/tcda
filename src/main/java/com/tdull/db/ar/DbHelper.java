@@ -1,6 +1,8 @@
 package com.tdull.db.ar;
 
 
+import com.tdull.db.ar.impl.ModelImpl;
+
 import javax.sql.DataSource;
 
 
@@ -9,6 +11,7 @@ import javax.sql.DataSource;
  * User: huangtao
  * Date: 2018/7/16
  * Time: 18:42
+ * @author huangtao
  */
 public class DbHelper {
     private DataSource dataSource;
@@ -17,13 +20,14 @@ public class DbHelper {
     }
 
     public Model getModelInstance() {
-        Model m = new Model();
+        Model m = new ModelImpl();
         m.setDataSource(dataSource);
         return m;
     }
 
     public Model getModelInstance(String tableName) {
-        Model m = new Model(tableName);
+        Model m = new ModelImpl();
+        m.table(tableName);
         m.setDataSource(dataSource);
         return m;
     }
