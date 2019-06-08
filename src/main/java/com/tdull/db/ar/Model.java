@@ -167,8 +167,10 @@ final public class Model {
             whereStrOne.append(" ");
 
             if (v instanceof List) {
-                String ee = ((List) v).get(0).toString().toUpperCase();//比较条件
-                Object vv = ((List) v).get(1);//第一个值
+                //比较条件
+                String ee = ((List) v).get(0).toString().toUpperCase();
+                //第一个值
+                Object vv = ((List) v).get(1);
                 if (exts.contains(ee)) {
                     //单值类型的条件
                     whereStrOne.append(" ");
@@ -188,7 +190,6 @@ final public class Model {
                         whereStrOne.append(StringUtils.join(placeholders, ","));
                     } else if (vv instanceof String) {
                         whereStrOne.append(vv);
-//                            values.add(vv);
                     } else {
                         throw new IllegalArgumentException(String.format("IN Unsupported types [%s]", vv.getClass()));
                     }
@@ -197,7 +198,8 @@ final public class Model {
                     //区间
                     whereStrOne.append(" ");
                     whereStrOne.append("BETWEEN ? AND ?");
-                    Object vv2 = ((List) v).get(2);//第二个值
+                    //第二个值
+                    Object vv2 = ((List) v).get(2);
                     values.add(vv);
                     values.add(vv2);
                 } else {
@@ -277,10 +279,11 @@ final public class Model {
             //将数据库查询到的列名全部转换为小写
             List<Map<String, Object>> new_list = new ArrayList<>();
             for (Map<String, Object> item : list) {
-                Map<String, Object> new_item = new HashMap<>();
+                Map<String, Object> new_item = new HashMap<>(10);
                 for (Map.Entry<String, Object> i : item.entrySet()) {
                     new_item.put(i.getKey().toLowerCase(), i.getValue());
-                    new_item.put(i.getKey(), i.getValue());//利用原始的key进行保存
+                    //利用原始的key进行保存
+                    new_item.put(i.getKey(), i.getValue());
                     if(mapUnderscoreToCamelCase) {
                         //column name 使用下划线命名方式，将属性名进行转换
                         new_item.put(mapUnderscoreToCamelCase(i.getKey()), i.getValue());
@@ -291,7 +294,8 @@ final public class Model {
             list = new_list;
         }
         for (Map<String, Object> item : list) {
-            T ob = mappedClass.newInstance();//实例化类对象
+            //实例化类对象
+            T ob = mappedClass.newInstance();
             for (Field ff : fi) {
                 ff.setAccessible(true);
                 String new_name;
@@ -372,9 +376,8 @@ final public class Model {
 
     /**
      * 批量插入
-     *
-     * @param dataList
-     * @return
+     * @param dataList [{字段名:值}]
+     * @return 插入情况
      */
     public int[] insert(List<Map<String, Object>> dataList) throws SQLException {
         List<String> insert_columns = new ArrayList<>();
@@ -419,7 +422,8 @@ final public class Model {
 
     private long insert(Map<String, Object> dataMap, boolean GeneratedKey) throws SQLException {
         List<String> insertSql = new ArrayList<>();
-        List<String> insertSql_vv = new ArrayList<>();//占位 ?
+        //占位 ?
+        List<String> insertSql_vv = new ArrayList<>();
         String[] columns = new String[dataMap.size()];
         int columsIndex = 0;
         for (Map.Entry<String, Object> m : dataMap.entrySet()) {
@@ -473,10 +477,22 @@ final public class Model {
         }
     }
 
+    /**
+     * 插入单条数据，获取自增字段
+     * @param dataMap { 字段名 : 值 }
+     * @return 返回影响的行数
+     * @throws SQLException
+     */
     public int insert(Map<String, Object> dataMap) throws SQLException {
         return (int) insert(dataMap, false);
     }
 
+    /**
+     * 插入单条数据，返回自增字段
+     * @param dataMap { 字段名 : 值 }
+     * @return 返回自增字段
+     * @throws SQLException
+     */
     public long insertRetrunGeneratedKeys(Map<String, Object> dataMap) throws SQLException {
         return insert(dataMap, true);
     }
@@ -493,6 +509,13 @@ final public class Model {
         return this;
     }
 
+    /**
+     * 更新数据
+     * 数据于map封装后传入，key为字段名，value为更新的值
+     * @param setMap { 字段名 : 值 }
+     * @return
+     * @throws SQLException
+     */
     public int update(Map<String, Object> setMap) throws SQLException {
         //构造数据
         this.set(setMap);
@@ -515,6 +538,17 @@ final public class Model {
         cleanAllArgument();
 
         //执行SQL
+        return executeUpdate(sql.toString(),data);
+    }
+
+    /**
+     * 执行更新或删除操作，内部调用
+     * @param sql 查询的sql
+     * @param data 用于替换占位符的数据，需要和占位符顺序一致
+     * @return 返回影响行数
+     * @throws SQLException
+     */
+    private int executeUpdate(String sql,List<Object> data)throws SQLException{
         Connection con = null;
         try {
             con = this.getDataSource().getConnection();
@@ -529,5 +563,30 @@ final public class Model {
         } finally {
             con.close();
         }
+    }
+    /**
+     * 删除数据，更具where条件进行删除
+     * 支持语句 DELETE FROM [table_name] WHERE col1=1
+     *          DELETE FROM [table_name] WHERE col1=1 AND col2='aaa'
+     * @return
+     */
+    public int delete() throws SQLException{
+        //构造完整SQL
+        StringBuilder sql = new StringBuilder();
+        List<Object> data = this.whereData;
+        sql.append("DELETE ");
+        sql.append(this.table);
+        sql.append(" FROM ");
+        sql.append(this.table);
+        if (null != this.where) {
+            sql.append(" WHERE ");
+            sql.append(this.where);
+        }
+        LOG.debug("sql {}", sql);
+        LOG.debug("data {}", data);
+        cleanAllArgument();
+        //执行SQL
+        return executeUpdate(sql.toString(),data);
+
     }
 }
