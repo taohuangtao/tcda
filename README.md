@@ -8,6 +8,16 @@
 * 目前只支持mysql  
 * 默认支持数据库小写加下划线命名方式和java bean映射方式    user_name > userName  ,直接驼峰法也可以。
 
+## mvn
+```
+<!-- https://mvnrepository.com/artifact/com.tdull.commons.db/tdull-commons-db-ar -->
+<dependency>
+    <groupId>com.tdull.commons.db</groupId>
+    <artifactId>tdull-commons-db-ar</artifactId>
+    <version>1.2.12</version>
+</dependency>
+```
+
 
 ## 快速开始  
 ### 配置数据源  
