@@ -22,8 +22,11 @@
 
 ## 快速开始  
 ### 配置数据源  
+```
 DbHelper dbHelper = new DbHelper();
-dbHelper.setDataSource(dataSource);//配置数据源,可以使用你项目的连接池的对象，也可以利用spring进行注入
+//配置数据源,可以使用你项目的连接池的对象，也可以利用spring进行注入
+dbHelper.setDataSource(dataSource);
+```
 ### 查询 cms_column 表所有数据  
 ```
 //cms_column配置需要查询的表 下面的操作都在这个表上面进行
