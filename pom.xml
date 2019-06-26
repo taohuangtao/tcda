@@ -5,7 +5,7 @@
          <modelVersion>4.0.0</modelVersion>
          
     <groupId>com.tdull.commons.db</groupId>
-    <artifactId>tdull-commons-db-ar</artifactId>
+    <artifactId>tcda</artifactId>
     <version>1.2.12</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,6 +50,7 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>1.2.17</version>
+            <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
