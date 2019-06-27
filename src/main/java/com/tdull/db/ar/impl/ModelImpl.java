@@ -1,5 +1,6 @@
 package com.tdull.db.ar.impl;
 
+import com.tdull.db.ar.DbException;
 import com.tdull.db.ar.Model;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -393,6 +394,50 @@ public class ModelImpl implements Model {
         }
     }
 
+    @Override
+    public List<Map<String, Object>> find(String column, Object val) throws SQLException {
+        List<Map<String, Object>> l = this.where("`"+column+"` = ?",Collections.singletonList(val)).select();
+        return l;
+    }
+
+    @Override
+    public <T> List<T> find(String column, Object val, Class<T> c) throws SQLException {
+        List<T> l;
+        try {
+            l = this.where("`"+column+"` = ?", Collections.singletonList(val)).select(c);
+        } catch (InstantiationException e) {
+            throw new DbException(e);
+        } catch (IllegalAccessException e) {
+            throw new DbException(e);
+        }
+        return l;
+    }
+
+    @Override
+    public Map<String, Object> findOne(String column, Object val) throws SQLException {
+        List<Map<String, Object>> l = this.where("`"+column+"` = ?",Collections.singletonList(val)).page(1,1).select();
+        if(null != l && !l.isEmpty()){
+            return l.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public <T> T findOne(String column, Object val, Class<T> c) throws SQLException {
+        List<T> l;
+        try {
+            l = this.where("`"+column+"` = ?", Collections.singletonList(val)).page(1,1).select(c);
+        } catch (InstantiationException e) {
+            throw new DbException(e);
+        } catch (IllegalAccessException e) {
+            throw new DbException(e);
+        }
+        if(null != l && !l.isEmpty()){
+            return l.get(0);
+        }
+        return null;
+    }
+
     /**
      * 批量插入
      * @param dataList [{字段名:值}]
@@ -594,7 +639,7 @@ public class ModelImpl implements Model {
      * @return
      */
     @Override
-    public int delete() throws SQLException{
+    public int delete() throws SQLException {
         //构造完整SQL
         StringBuilder sql = new StringBuilder();
         List<Object> data = this.whereData;
