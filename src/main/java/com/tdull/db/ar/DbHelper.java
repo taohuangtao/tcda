@@ -2,7 +2,6 @@ package com.tdull.db.ar;
 
 
 import com.tdull.db.ar.impl.ModelImpl;
-import com.tdull.db.ar.plus.ModelPlus;
 
 import javax.sql.DataSource;
 

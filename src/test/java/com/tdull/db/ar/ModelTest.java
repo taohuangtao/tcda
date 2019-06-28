@@ -8,11 +8,14 @@ package com.tdull.db.ar;
  */
 
 public class ModelTest {
-
-    public static void main(String[] args) {
-        Model m = new Model();
-        System.out.println(m.mapUnderscoreToCamelCase("userId"));
-        System.out.println(m.mapUnderscoreToCamelCase("accountIdJksdjf"));
+    public ModelTest(){
+        System.out.println(this.getClass().getSimpleName());
     }
+    public static void main(String[] args) {
+        System.out.println(new b());
+    }
+
+}
+class b extends ModelTest{
 
 }

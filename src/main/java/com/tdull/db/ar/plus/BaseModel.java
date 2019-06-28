@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Method;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * 2019/6/27 10:37
@@ -28,7 +29,12 @@ public abstract class BaseModel<T> extends ModelImpl {
     public void setPrimaryKey(String primaryKey) {
         this.primaryKey = primaryKey;
     }
-    public T find(Object val){
+    public void find(Object val){
+        try {
+//            List<T> sss = this.find(getPrimaryKey(),val,new T());
+        } catch (Exception e) {
+            throw new RuntimeException("未实现");
+        }
         throw new RuntimeException("未实现");
     }
     protected BaseModel() {

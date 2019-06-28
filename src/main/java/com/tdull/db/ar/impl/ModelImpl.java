@@ -5,6 +5,7 @@ import com.tdull.db.ar.Model;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
 import java.lang.reflect.Field;
@@ -363,7 +364,7 @@ public class ModelImpl implements Model {
     public List<Map<String, Object>> select(String sql, List<Object> whereData) throws SQLException {
         Connection con = null;
         try {
-            con = this.getDataSource().getConnection();
+            con = DataSourceUtils.getConnection(this.getDataSource());
             PreparedStatement ps = con.prepareStatement(sql);
             LOG.debug(sql);
             if (null != whereData && whereData.size() > 0) {
@@ -390,7 +391,7 @@ public class ModelImpl implements Model {
             ps.close();
             return data;
         } finally {
-            con.close();
+            DataSourceUtils.releaseConnection(con,this.getDataSource());
         }
     }
 
@@ -469,7 +470,7 @@ public class ModelImpl implements Model {
 
         Connection con = null;
         try {
-            con = this.getDataSource().getConnection();
+            con = DataSourceUtils.getConnection(this.getDataSource());
             PreparedStatement ps = con.prepareStatement(sql.toString());
             for (Map<String, Object> m : dataList) {
                 for (int i = 0; i < columns.length; i++) {
@@ -481,7 +482,7 @@ public class ModelImpl implements Model {
             ps.close();
             return ns;
         } finally {
-            con.close();
+            DataSourceUtils.releaseConnection(con,this.getDataSource());
         }
     }
 
@@ -513,7 +514,7 @@ public class ModelImpl implements Model {
 
         Connection con = null;
         try {
-            con = this.getDataSource().getConnection();
+            con = DataSourceUtils.getConnection(this.getDataSource());
             PreparedStatement ps ;
             if(generatedKey){
                 ps = con.prepareStatement(sql.toString(),PreparedStatement.RETURN_GENERATED_KEYS);
@@ -538,7 +539,7 @@ public class ModelImpl implements Model {
                 return s;
             }
         } finally {
-            con.close();
+            DataSourceUtils.releaseConnection(con,this.getDataSource());
         }
     }
 
@@ -619,7 +620,7 @@ public class ModelImpl implements Model {
     private int executeUpdate(String sql,List<Object> data)throws SQLException{
         Connection con = null;
         try {
-            con = this.getDataSource().getConnection();
+            con = DataSourceUtils.getConnection(this.getDataSource());
             PreparedStatement ps = con.prepareStatement(sql.toString());
 
             for (int i = 0; i < data.size(); i++) {
@@ -629,7 +630,7 @@ public class ModelImpl implements Model {
             ps.close();
             return n;
         } finally {
-            con.close();
+            DataSourceUtils.releaseConnection(con,this.getDataSource());
         }
     }
     /**
