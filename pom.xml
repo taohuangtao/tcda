@@ -27,9 +27,9 @@
     </licenses>
     <scm>
         <tag>master</tag>
-        <url>git@github.com:taohuangtao/tdull-commons-db-ar.git</url>
-        <connection>scm:git@github.com:taohuangtao/tdull-commons-db-ar.git</connection>
-        <developerConnection>scm:git@github.com:taohuangtao/tdull-commons-db-ar.git</developerConnection>
+        <url>git@github.com:taohuangtao/tcda.git</url>
+        <connection>scm:git@github.com:taohuangtao/tcda.git</connection>
+        <developerConnection>scm:git@github.com:taohuangtao/tcda.git</developerConnection>
     </scm>
     <developers>
         <developer>
