@@ -14,8 +14,8 @@
 <!-- https://mvnrepository.com/artifact/com.tdull.commons.db/tdull-commons-db-ar -->
 <dependency>
     <groupId>com.tdull.commons.db</groupId>
-    <artifactId>tdull-commons-db-ar</artifactId>
-    <version>1.2.12</version>
+    <artifactId>tcda</artifactId>
+    <version>1.3.1</version>
 </dependency>
 ```
 
