@@ -18,16 +18,17 @@ import java.util.*;
  * @author huangtao
  */
 public class ModelImpl implements Model {
-    private final Logger LOG = LoggerFactory.getLogger(ModelImpl.class);
+    private final transient Logger LOG = LoggerFactory.getLogger(ModelImpl.class);
     /**
      * 是否将驼峰发的属性名称转换为小写加下划线形式 ，只用于查询 pojo 的时候
      */
-    private boolean mapUnderscoreToCamelCase = true;
+    protected transient boolean mapUnderscoreToCamelCase = true;
     /**
      * 数据库列名是否忽略大小写
      */
-    private boolean columnNameIgnoreCase = true;
-    private DataSource dataSource;
+    protected transient boolean columnNameIgnoreCase = true;
+
+    private transient DataSource dataSource;
 
     @Override
     public void setDataSource(DataSource dataSource) {
@@ -44,15 +45,15 @@ public class ModelImpl implements Model {
         this.columnNameIgnoreCase = columnNameIgnoreCase;
     }
 
-    private String table;
-    private String where;
-    private List<Object> whereData;
-    private String set;
-    private List<Object> setData;
-    private String limit;
-    private String filter = "*";
-    private String orderBy;
-    private String groupBy;
+    private transient String table;
+    private transient String where;
+    private transient List<Object> whereData;
+    private transient String set;
+    private transient List<Object> setData;
+    private transient String limit;
+    private transient String filter = "*";
+    private transient String orderBy;
+    private transient String groupBy;
     private final static List<String> EXTS = Arrays.asList(">", "<", "=", "<>", "!=", "LIKE");
 
     public ModelImpl() {
