@@ -1,6 +1,12 @@
 # TCDA
 
+##  开发中
+
+1、字段映射中  数据库中 user_id  JAVA 中 userID 这样的映射，只能映射为userId.（不用解决）
+2、自增主键功能
+
 ## 简介
+
 轻量级的orm工具,实现ActiveRecord模式、连贯操作和统计查询.简化sql脚本编写，和其他类似orm工具复炸的配置文件和接口文件等，大大简化数据库操作，用最少的代码做最多的事。  
 抛弃其他框架繁琐的xml语法，大量的常规操作都不需要写sql语句，极大减轻宽表的插入和跟新操作。  
 核心文件就只有一个，没有多余的方法，只有where,filter,select,insert,orderBy,groupBy,update,delete核心方法。
