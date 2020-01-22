@@ -54,7 +54,7 @@ public class ModelImpl implements Model {
     private transient String filter = "*";
     private transient String orderBy;
     private transient String groupBy;
-    private final static List<String> EXTS = Arrays.asList(">", "<", "=", "<>", "!=", "LIKE");
+    private final static List<String> EXTS = Arrays.asList(">", ">=", "<", "<=", "=", "<>", "!=", "LIKE");
 
     public ModelImpl() {
     }
