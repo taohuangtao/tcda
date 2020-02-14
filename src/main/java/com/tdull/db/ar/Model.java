@@ -40,6 +40,15 @@ public interface Model {
     Model where(Map<String, Object> where);
 
     Model where(String where);
+    Model where(Where where);
+
+    /**
+     * 支持复杂条件  ((a>8) AND (b<7)) OR ((c=3) OR (d=1))
+     * 利用 WhereTool 生成
+     * @param where
+     * @return
+     */
+    Model where(WhereTerm where);
 
     Model where(String where, List<Object> data);
 
