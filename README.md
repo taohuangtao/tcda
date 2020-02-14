@@ -1,10 +1,17 @@
 # TCDA
 
+##  开发中
+
+1、字段映射中  数据库中 user_id  JAVA 中 userID 这样的映射，只能映射为userId.（不用解决）
+2、自增主键功能
+
 ## 简介
+
 轻量级的orm工具,实现ActiveRecord模式、连贯操作和统计查询.简化sql脚本编写，和其他类似orm工具复炸的配置文件和接口文件等，大大简化数据库操作，用最少的代码做最多的事。  
 抛弃其他框架繁琐的xml语法，大量的常规操作都不需要写sql语句，极大减轻宽表的插入和跟新操作。  
 核心文件就只有一个，没有多余的方法，只有where,filter,select,insert,orderBy,groupBy,update,delete核心方法。
 最少的依赖，只有日志系统依赖，无其他第三方依赖。
+依赖 spring jdbc ，集成到spring 以获得 事务支持，由spring进行管理，无需进行特殊配置
 
 * 目前只支持mysql  
 * 默认支持数据库小写加下划线命名方式和java bean映射方式    user_name > userName  ,直接驼峰法也可以。
@@ -15,7 +22,7 @@
 <dependency>
     <groupId>com.tdull.commons.db</groupId>
     <artifactId>tcda</artifactId>
-    <version>1.3.1</version>
+    <version>1.3.2</version>
 </dependency>
 ```
 
