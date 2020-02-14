@@ -15,51 +15,64 @@ import java.util.List;
 public class WhereTool {
     private final Logger logger = LoggerFactory.getLogger(WhereTool.class);
 
-    public static WhereTerm or(Where where,Where... wbs) {
+    public static WhereTerm or(Where... ws) {
         WhereTerm t = new WhereTerm();
-        t.getList().add(where);
-        for(Where b : wbs){
+        for(Where b : ws){
             t.getList().add(b);
         }
         t.setExp("OR");
         return t;
     }
-    public static WhereTerm or(WhereTerm ta,WhereTerm... tb) {
+    public static WhereTerm or(WhereTerm... ts) {
         WhereTerm t = new WhereTerm();
-        t.getChild().add(ta);
-        for(WhereTerm b : tb){
+        for(WhereTerm b : ts){
             t.getChild().add(b);
         }
         t.setExp("OR");
         return t;
     }
-    public static WhereTerm and(Where wa,Where... wbs) {
+    public static WhereTerm and(Where... ws) {
         WhereTerm t = new WhereTerm();
-        t.getList().add(wa);
-        for(Where wb : wbs){
+        for(Where wb : ws){
             t.getList().add(wb);
         }
         t.setExp("AND");
         return t;
     }
-    public static WhereTerm and(WhereTerm ta,WhereTerm... tbs) {
+    public static WhereTerm and(WhereTerm... ts) {
         WhereTerm t = new WhereTerm();
-        t.getChild().add(ta);
-        for(WhereTerm tb : tbs){
+        for(WhereTerm tb : ts){
             t.getChild().add(tb);
         }
         t.setExp("AND");
         return t;
     }
-    public static WhereTerm and(WhereTerm ta,Where... wbs) {
+    public static WhereTerm and(WhereTerm ta,Where... ws) {
         WhereTerm t = new WhereTerm();
         t.getChild().add(ta);
-        for(Where tb : wbs){
-            t.getList().add(tb);
+        for(Where w : ws){
+            t.getList().add(w);
         }
         t.setExp("AND");
         return t;
     }
+
+    /**
+     * 抓换 普通 where 条件为树形节点
+     * @param w
+     * @return
+     */
+    public static WhereTerm whereToWhereTerm(Where w){
+        WhereTerm t = new WhereTerm();
+        t.getList().add(w);
+        return t;
+    }
+
+    /**
+     * 解析 树形 where 条件为 model 可用的查询条件
+     * @param t 复炸树形查询条件的根节点
+     * @return
+     */
     public static WhereData parseTerm(WhereTerm t){
         StringBuffer sql = new StringBuffer();
         List<Object> data = new ArrayList<>();

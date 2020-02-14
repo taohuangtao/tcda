@@ -64,3 +64,5 @@ where.put("id",Arrays.asList("IN",Arrays.asList(1,2,3,4,5)));
 where.put("id",Arrays.asList("BETWEEN",Arrays.asList(1,100)));
 column.where(where).select();
 ```
+# Where 类，创建查询条件
+# WhereTool 生成复杂查询的组合类

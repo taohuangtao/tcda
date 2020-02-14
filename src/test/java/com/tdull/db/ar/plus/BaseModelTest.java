@@ -18,7 +18,7 @@ import static org.junit.Assert.*;
  * @author huangtao
  */
 public class BaseModelTest {
-    private final Logger logger = LoggerFactory.getLogger(BaseModel.class);
+    private final Logger logger = LoggerFactory.getLogger(BaseModelTest.class);
     static {
         FileSystemXmlApplicationContext context =
                 new FileSystemXmlApplicationContext(BaseModelTest.class.getResource("/spring-base.xml").getPath());
