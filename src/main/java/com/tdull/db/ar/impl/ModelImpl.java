@@ -271,7 +271,9 @@ public class ModelImpl implements Model {
                     columnName = columnName.toLowerCase();
                 }
                 try {
-                    ff.set(ob, item.get(columnName));
+                    if(null != item.get(columnName)){
+                        ff.set(ob, item.get(columnName));
+                    }
                 } catch (Exception e) {
                     LOG.error(e.getMessage(), e);
                 }
