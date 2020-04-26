@@ -226,8 +226,9 @@ public class ModelImpl implements Model {
         return list;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    private <T> List<T> select(String sql, List<Object> whereData, Class<T> mappedClass) throws SQLException, IllegalAccessException, InstantiationException {
+    public  <T> List<T> select(String sql, List<Object> whereData, Class<T> mappedClass) throws SQLException, IllegalAccessException, InstantiationException {
 
         List<T> ar = new ArrayList<>();
         Field[] fi = mappedClass.getDeclaredFields();
