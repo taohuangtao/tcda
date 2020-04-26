@@ -1,7 +1,6 @@
 package com.tdull.db.ar.impl;
 
-import com.tdull.db.ar.DbException;
-import com.tdull.db.ar.Model;
+import com.tdull.db.ar.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -139,6 +138,22 @@ public class ModelImpl implements Model {
     }
 
     @Override
+    public Model where(Where where) {
+        WhereData wd = where.getWhereData();
+        this.where = wd.getSql();
+        this.whereData = wd.getData();
+        return this;
+    }
+
+    @Override
+    public Model where(WhereTerm whereTerm) {
+        WhereData wd = WhereTool.parseTerm(whereTerm);
+        this.where = wd.getSql();
+        this.whereData = wd.getData();
+        return this;
+    }
+
+    @Override
     public Model where(String where, List<Object> data) {
         this.where = where;
         this.whereData = data;
@@ -156,83 +171,8 @@ public class ModelImpl implements Model {
 
     @Override
     public Object[] parseWhere(Map<String, Object> where) {
-        StringBuilder sql = new StringBuilder();
-        List<String> whereList = new ArrayList<>();
-        List<Object> values = new ArrayList<>();
-        for (Map.Entry<String, Object> m : where.entrySet()) {
-            StringBuilder whereStrOne = new StringBuilder();
-            String column = m.getKey();
-            Object v = m.getValue();
-            if ("_string".equals(column) && v instanceof String) {
-                //是表达式，直接拼接
-                whereStrOne.append(" ( ");
-                whereStrOne.append(v);
-                whereStrOne.append(" )");
-                continue;
-            }
-
-            whereStrOne.append(" (");
-            if (column.indexOf(".") > 0) {
-                //有点 是表名加字段名，取消反引号
-                whereStrOne.append(column);
-            }else if(column.indexOf("(") > 0){
-                //有括号 是函数，取消反引号
-                whereStrOne.append(column);
-            } else {
-                whereStrOne.append("`" + column + "`");
-            }
-            whereStrOne.append(" ");
-
-            if (v instanceof List) {
-                //比较条件
-                String ee = ((List) v).get(0).toString().toUpperCase();
-                //第一个值
-                Object vv = ((List) v).get(1);
-                if (EXTS.contains(ee)) {
-                    //单值类型的条件
-                    whereStrOne.append(" ");
-                    whereStrOne.append(ee);
-                    whereStrOne.append(" ?");
-                    values.add(vv);
-                } else if ("IN".equals(ee) || "NOT IN".equals(ee)) {
-                    whereStrOne.append(" ");
-                    whereStrOne.append(ee);
-                    whereStrOne.append(" (");
-                    if (vv instanceof List) {
-                        List<String> placeholders = new ArrayList<>();
-                        for (Object vvv : (List) vv) {
-                            placeholders.add("?");
-                            values.add(vvv);
-                        }
-                        whereStrOne.append(StringUtils.join(placeholders, ","));
-                    } else if (vv instanceof String) {
-                        whereStrOne.append(vv);
-                    } else {
-                        throw new IllegalArgumentException(String.format("IN Unsupported types [%s]", vv.getClass()));
-                    }
-                    whereStrOne.append(")");
-                } else if ("BETWEEN".equals(ee)) {
-                    //区间
-                    whereStrOne.append(" ");
-                    whereStrOne.append("BETWEEN ? AND ?");
-                    //第二个值
-                    Object vv2 = ((List) v).get(2);
-                    values.add(vv);
-                    values.add(vv2);
-                } else {
-                    throw new IllegalArgumentException(String.format("IN Unsupported types [%s]", vv.getClass().getName()));
-                }
-            } else {
-                //直接判断是否相等
-                whereStrOne.append(" =");
-                whereStrOne.append(" ?");
-                values.add(v);
-            }
-            whereStrOne.append(")");
-            whereList.add(whereStrOne.toString());
-        }
-        sql.append(StringUtils.join(whereList, " AND"));
-        return new Object[]{sql.toString(), values};
+        WhereData whereData = Where.parseWhere(where);
+        return new Object[]{whereData.getSql(), whereData.getData()};
     }
 
     @Override
@@ -286,8 +226,9 @@ public class ModelImpl implements Model {
         return list;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    private <T> List<T> select(String sql, List<Object> whereData, Class<T> mappedClass) throws SQLException, IllegalAccessException, InstantiationException {
+    public  <T> List<T> select(String sql, List<Object> whereData, Class<T> mappedClass) throws SQLException, IllegalAccessException, InstantiationException {
 
         List<T> ar = new ArrayList<>();
         Field[] fi = mappedClass.getDeclaredFields();
@@ -330,7 +271,9 @@ public class ModelImpl implements Model {
                     columnName = columnName.toLowerCase();
                 }
                 try {
-                    ff.set(ob, item.get(columnName));
+                    if(null != item.get(columnName)){
+                        ff.set(ob, item.get(columnName));
+                    }
                 } catch (Exception e) {
                     LOG.error(e.getMessage(), e);
                 }

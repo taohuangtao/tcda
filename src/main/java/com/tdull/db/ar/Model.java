@@ -41,6 +41,17 @@ public interface Model {
 
     Model where(String where);
 
+    Model where(Where where);
+
+    /**
+     * 支持复杂条件  ((a&gt8) AND (b&lt7)) OR ((c=3) OR (d=1))
+     * 利用 WhereTool 生成
+     *
+     * @param where
+     * @return
+     */
+    Model where(WhereTerm where);
+
     Model where(String where, List<Object> data);
 
     Model page(int page, int pageSize);
@@ -63,25 +74,31 @@ public interface Model {
 
     List<Map<String, Object>> select(String sql, List<Object> whereData) throws SQLException;
 
+    <T> List<T> select(String sql, List<Object> whereData, Class<T> mappedClass) throws SQLException, IllegalAccessException, InstantiationException;
+
     /**
      * 查询指定的内容列表
+     *
      * @param column
      * @param val
      * @return
      * @throws SQLException
      */
-    List<Map<String, Object>> find(String column,Object val) throws SQLException;
-    <T> List<T> find(String column,Object val,Class<T> c) throws SQLException;
+    List<Map<String, Object>> find(String column, Object val) throws SQLException;
+
+    <T> List<T> find(String column, Object val, Class<T> c) throws SQLException;
 
     /**
      * 查询指定列的值，返回第一条查询到的数据
+     *
      * @param column
      * @param val
      * @return
      * @throws SQLException
      */
-    Map<String, Object> findOne(String column,Object val) throws SQLException;
-    <T> T findOne(String column,Object val,Class<T> c) throws SQLException;
+    Map<String, Object> findOne(String column, Object val) throws SQLException;
+
+    <T> T findOne(String column, Object val, Class<T> c) throws SQLException;
 
 
     /**
