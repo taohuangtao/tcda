@@ -106,7 +106,8 @@ public class ModelImpl implements Model {
     public Model filter(String[] filter) {
         String[] filterNew = new String[filter.length];
         for (int i = 0; i < filterNew.length; i++) {
-            if (filter[i].contains("(") || filter[i].contains(" ")) {
+            if (filter[i].contains("(") || filter[i].contains(" ") || filter[i].contains(".")) {
+                // 包含括号，包含空格，包含.都是特殊情况，不用加反引号
                 filterNew[i] = filter[i];
             } else {
                 filterNew[i] = "`" + filter[i] + "`";
